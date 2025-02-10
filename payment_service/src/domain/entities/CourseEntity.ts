@@ -1,4 +1,5 @@
 import { Date, Types } from "mongoose";
+import { UserEntity } from "./UserEntity";
 
 interface Lesson {
     lessonNumber: string,
@@ -40,6 +41,7 @@ export interface CourseEntity {
     description: string;
     thumbnail: string;
     instructorRef: string;
+    instructor?:UserEntity;
     categoryRef: Types.ObjectId;
     language?: string;
     lessons: [Lesson]

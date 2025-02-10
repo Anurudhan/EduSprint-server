@@ -44,6 +44,21 @@ export const routes = (app: Application) => {
   );
 
   app.use(
+    "/chat",
+    proxy(Service.CHAT_SERVICE_URL, {
+      proxyReqPathResolver: (req) => req.url,
+      userResDecorator: async (proxyRes, proxyResData, req, res) => {
+        res.status(proxyRes.statusCode??500);
+        return proxyResData;
+      },
+      proxyErrorHandler: (err, res, next) => {
+        console.error("Proxy Error:", err.message);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+      },
+    })
+  );
+
+  app.use(
     "/course",
     proxy(Service.COURSE_SERVICE_URL, {
       proxyReqPathResolver: (req) => req.url,

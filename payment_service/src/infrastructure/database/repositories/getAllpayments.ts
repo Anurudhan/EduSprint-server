@@ -19,7 +19,46 @@ const mapPaymentToEntity = (payment: any): PaymentEntity => {
 export const getAllPayments = async ():Promise<PaymentEntity[]> => {
     try {
         
-        const result = await Payment.find({})
+        const result = await Payment.aggregate([
+            {
+              $lookup: {
+                from: "users", 
+                localField: "userId", 
+                foreignField: "_id",
+                as: "user",
+              },
+            },
+            {
+              $unwind: "$user",
+            },
+            {
+              $lookup: {
+                from: "courses",
+                localField: "courseId",
+                foreignField: "_id", 
+                as: "course", 
+              },
+            },
+            {
+              $unwind: "$course",
+            },
+            {
+              $lookup: {
+                from: "users",
+                localField: "course.instructorRef", 
+                foreignField: "_id", 
+                as: "course.instructor", 
+              },
+            },
+            {
+              $unwind: "$course.instructor", 
+            },
+            {
+              $sort: { createdAt: -1 }, 
+            },
+          ]);
+          console.log(result)
+          
 
         const paymentEntities = result.map(mapPaymentToEntity);
 

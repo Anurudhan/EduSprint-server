@@ -1,4 +1,5 @@
 import { PaymentEntity, SessionEntity } from "../../domain/entities";
+import { UserEntity } from "../../domain/entities/UserEntity";
 
 
 export interface IRepositories{
@@ -12,4 +13,6 @@ export interface IRepositories{
         totalPayments: string;
         pendingPaymentCount: string;
       }>;
+    getPaymentsByOfficialId:(userId:string) => Promise<PaymentEntity[] | null>;
+    getUserById:(userId:string) => Promise<UserEntity | null>;
 } 

@@ -19,6 +19,11 @@ const paymentSchema = new Schema(
 			enum: ["pending", "completed", "failed", "refunded"],
 			required: true,
 		},
+		type:{
+			type: String,
+			enum: ["credit", "debit"],
+			required: true,
+		},
 		amount: {
 			type: Number,
 			required: true,

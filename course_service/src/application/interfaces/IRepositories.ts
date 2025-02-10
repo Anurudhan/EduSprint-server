@@ -1,4 +1,4 @@
-import { CategoryEntity, CourseEntity, EnrollmentEntity, filterEntity, pageEntity, PaginationMeta } from "../../domain/entities"
+import { AssessmentEntity, CategoryEntity, CourseEntity, EnrollmentEntity, filterEntity, pageEntity, PaginationMeta } from "../../domain/entities"
 
 export interface IRepositories{
     createCategory: (data: CategoryEntity) => Promise < CategoryEntity>;
@@ -14,4 +14,6 @@ export interface IRepositories{
     createEnrollment: (data: EnrollmentEntity) => Promise <EnrollmentEntity | null>;
     getEnrollmentByUserId: (userId: string) => Promise<EnrollmentEntity[] | null>;
     getEnrollmentById:(id:string) => Promise<EnrollmentEntity|null>;
+
+    createAssessment:(data:AssessmentEntity) => Promise <AssessmentEntity|null>;
 } 

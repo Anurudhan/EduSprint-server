@@ -7,7 +7,7 @@ export const getAllStudents = async (
 ): Promise<UserEntity[] | null> => {
 	try {
 		if (!page || !limit) {
-			const allData = await User.find({ role: "instructor" }).sort({
+			const allData = await User.find({ role: "student" }).sort({
 				updatedAt: "descending",
 			});
 			return allData;

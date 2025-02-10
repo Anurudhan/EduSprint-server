@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { PaymentEntity } from "../../../domain/entities";
 import { Payment } from "../models";
 
@@ -24,7 +25,25 @@ export const getPaymentsByUserId = async (userId: string):Promise<{
         pendingPaymentCount: string;
       }> => {
   try {
-      const payments = await Payment.find({ userId: userId }).sort({ createdAt: -1 });
+    const payments = await Payment.aggregate([
+      {
+        $match: { userId: new Types.ObjectId(userId)}
+      },
+      {
+        $lookup: {
+          from: "courses", 
+          localField: "courseId", 
+          foreignField: "_id", 
+          as: "course" 
+        }
+      },
+      {
+        $unwind: "$course"
+      },
+      {
+        $sort: { createdAt: -1 } 
+      }
+    ]);
       
       const paymentEntities = payments.map(mapPaymentToEntity);
     

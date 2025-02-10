@@ -9,6 +9,7 @@ export interface PaymentEntity {
     method?: string;
     status: string;
     amount: number;
+    type?: "credit" | "debit";
     createdAt?:string | Date;
     updatedAt?:string | Date;
     course?:CourseEntity;

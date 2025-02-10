@@ -12,7 +12,14 @@ export const getEnrollmentByUserIdController = (dependancies: IDependencies) => 
 
             const result = await getEnrollmentByUserIdUseCase(dependancies)
                 .execute(userId);
-
+                if(result  === null){
+                    res.status(404).json({
+                        success: false,
+                        data: result,
+                        message: "Enrollment data not fount"
+                    });
+        
+                }
             res.status(200).json({
                 success: true,
                 data: result,

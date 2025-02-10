@@ -20,7 +20,7 @@ export const getAllCourseController = (dependencie: IDependencies) => {
         else res.status(httpStatusCode.OK).json({success:true,message:"NO data",data:{}}) 
     } catch (error: unknown) {
       if (error instanceof Error) next(error.message);
-      else next();
+      else next(error);
     }
   };
 };

@@ -12,12 +12,10 @@ export const createEnrollmentController = (dependencies: IDependencies) => {
 			const enrollments = await getEnrollmentByUserIdUseCase(
 				dependencies
 			).execute(req.body?.userId);
-
 			const existingEnrollment = enrollments?.find(
 				(item) =>
 					item.courseId._id.toString() === req.body?.courseId?.toString()
 			);
-
 			if (existingEnrollment) {
 				 res.status(200).json({
 					success: false,
@@ -25,7 +23,6 @@ export const createEnrollmentController = (dependencies: IDependencies) => {
 					message: "You have already enrolled to this course!",
 				});
 			}
-
 			const result = await createEnrollmentUseCase(dependencies).execute(
 				req.body
 			);

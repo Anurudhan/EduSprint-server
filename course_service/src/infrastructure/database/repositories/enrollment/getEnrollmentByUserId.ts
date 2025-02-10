@@ -57,7 +57,7 @@ export const getEnrollmentByUserId = async (
     ]);
 
     if (!enrollment || enrollment.length === 0) {
-      throw new Error("No enrollments found!");
+      return null
     }
 
     return enrollment as EnrollmentEntity[];

@@ -6,7 +6,9 @@ export const routes = (dependencie:IDependencies)=>{
     const router=Router();
     const {createCategory,editCategory,
         getAllCategory,addCourse,getCourseByInstructor
-        ,getCourseById,updateCourse,getAllCourse,createEnrollment,getEnrollmentByUserId} = controller(dependencie)
+        ,getCourseById,updateCourse,getAllCourse,
+        createEnrollment,getEnrollmentByUserId,
+    createAssessment} = controller(dependencie)
 
     router.route("/create-category").post(createCategory);
     router.route("/update-category").post(editCategory);
@@ -21,6 +23,8 @@ export const routes = (dependencie:IDependencies)=>{
     router.route("/enrollment").post(createEnrollment)
     router.route("/enrollment/:id").get();
     router.route("/enrollment/user/:userId").get(getEnrollmentByUserId);
+
+    router.route("/assessment").post(createAssessment)
 
     return router
 }

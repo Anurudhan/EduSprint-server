@@ -21,3 +21,7 @@ course_service/.env
 payment_service/node_modules
 payment_service/logs
 payment_service/.env
+
+chat_service/node_modules
+chat_service/logs
+chat_service/.env
