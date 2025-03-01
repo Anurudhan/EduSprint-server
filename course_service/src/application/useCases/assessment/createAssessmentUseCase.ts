@@ -5,7 +5,7 @@ export const  createAssessmentUseCase = (dependencie:IDependencies)=>{
     const {repositories:{createAssessment}} = dependencie;
     return {
         execute:async(data:AssessmentEntity)=>{
-            const result = createAssessment(data)
+            const result = await createAssessment(data)
             return result;
         }
     }

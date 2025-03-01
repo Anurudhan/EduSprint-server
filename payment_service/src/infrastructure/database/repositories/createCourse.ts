@@ -3,19 +3,20 @@ import { Course } from "../models";
 
 export const createCourse = async(data:CourseEntity) =>{
     try{
-        console.log(data._id, "this is our ID for the user updating")
+        console.log(data._id, "this is our ID for the user updating");
+        if (!data._id) throw new Error("No  provided the course_id");
+        const existing = await Course.findById(data._id)
         let updatedCourse;
-        if (!data._id&&data) {
-            throw new Error("Course ID is required for editing.");
-        }
-        if(!data._id && !data){
+        if(!existing){ 
             updatedCourse = await Course.create(data);
         }
-       updatedCourse = await Course.findByIdAndUpdate(
-            data._id, 
-            { $set: data }, 
-            { new: true, runValidators: true } 
-        );
+        else{
+            updatedCourse = await Course.findByIdAndUpdate(
+                    data._id, 
+                    { $set: data }, 
+                    { new: true, runValidators: true } 
+                );
+        }
 
         if (!updatedCourse) {
             throw new Error("Course not found or update failed.");

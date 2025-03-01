@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-enum Role {
+export enum Role {
     student='student',
     teacher='instructor',
     admin='admin'

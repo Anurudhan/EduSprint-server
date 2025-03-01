@@ -16,7 +16,12 @@ export const getMessagesByChatIdController = (dependencies: IDependencies) => {
                 .execute(id);
 
             if (!result) {
-                throw new Error("Messages retrievel failed!");
+                res.status(200).json({
+                    success: true,
+                    data: null,
+                    message: "Messages retrieved!"
+                });
+                
             }
 
             res.status(200).json({

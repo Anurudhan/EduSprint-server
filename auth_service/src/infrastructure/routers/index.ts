@@ -25,7 +25,7 @@ export const routes = (dependancies: IDependencies) => {
     router.route("/update-password").post(updatePassword);
     router.route("/change-password").post(changePassword);
     router.route("/register-form").post(registerForm)
-    router.route("/getuser").get(jwtMiddleware,getUser);
+    router.route("/getuser").get(jwtMiddleware(),getUser);
     router.route("/logout").delete(logout)
     return router;
 };

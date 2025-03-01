@@ -1,18 +1,25 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../app/interfaces/IDependencies";
+import { httpStatusCode } from "../../_lib/common";
 
 export const getChatsByUserIdController = (dependencies:IDependencies) => {
     const {usecases:{getChatsByUserIdUseCase}} = dependencies;
     return async(req:Request,res:Response,next:NextFunction) =>{
         try {
-            const id = req.params?.userId;
-            
 
+            
+            const {userId} = req.query;
+            console.log("here the call of the get chat of user Id",userId)
             const result = await getChatsByUserIdUseCase(dependencies)
-                .execute(id);
+                .execute(userId as string);
+            console.log(result,"this is result of the user")
 
             if (!result) {
-                throw new Error("Chats retrievel failed!");
+                res.status(httpStatusCode.UNAUTHORIZED).json({
+                    success: true,
+                    data: result,
+                    message: "Chats retrievel failed!"
+                });
             }
 
             res.status(200).json({

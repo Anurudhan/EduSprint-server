@@ -1,6 +1,7 @@
 
 import { Request, Response, NextFunction } from "express";
 import { IDependencies } from "../../app/interfaces/IDependencies";
+import { httpStatusCode } from "../../_lib/common";
 
 export const createChatController = (dependencies: IDependencies) => {
 
@@ -20,10 +21,10 @@ export const createChatController = (dependencies: IDependencies) => {
                 .execute(data);
 
             if (!result) {
-                throw new Error("Chat creation failed!");
+                res.status(httpStatusCode.UNAUTHORIZED).json({success: false,data:result, message: "Occure an unauthorized error." });
             }
 
-            res.status(200).json({
+            res.status(httpStatusCode.OK).json({
                 success: true,
                 data: result,
                 message: "Chat created!"

@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
-import helmet from 'helmet'
+import helmet from 'helmet';
 import errorHandler from "../_lib/common/errorHandler";
 import { routers } from "../infrastructure/routers";
 import { dependencies } from "../_boot/dependencie";
@@ -15,15 +15,17 @@ if (process.env.NODE_ENV === "production") {
   config({ path: "./.env.local" });
 }
 
-console.log(process.env.FRONTEND_URL,"=======chat=========");
-
+// Get frontend URL from environment with fallback
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+console.log(FRONTEND_URL, "=======chat frontend URL=========");
 
 const app: Application = express();
 
 const corsOptions = {
-  origin: String(process.env.FRONTEND_URL),
+  origin: [FRONTEND_URL, "http://localhost:5173"], // Add common development URLs
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 };
 
 // Middleware
@@ -31,15 +33,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
-app.use(helmet())
+// Modify helmet to allow WebSocket connections
+app.use(helmet({
+  contentSecurityPolicy: false, // Disable CSP for WebSocket connections
+}));
 app.use(cors(corsOptions));
 
-app.get("/api/chat/test", (req: Request, res: Response) => {
+// Health check endpoint
+app.get("/chat/test", (req: Request, res: Response) => {
   res.status(200).json({
     message: "Chat service ON!",
+    timestamp: new Date().toISOString()
   });
 });
-// app.use("/api/chat", routes(dependancies));
+
+// API routes
 app.use("/", routers(dependencies));
 
 // Not found handler

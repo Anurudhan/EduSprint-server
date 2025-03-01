@@ -28,11 +28,11 @@ const enrollmentSchema = new Schema({
     },
     progress: {
         completedLessons: {
-            type: [Schema.Types.ObjectId],
+            type: [String],
             default: [],
         },
         completedAssessments: {
-            type: [Schema.Types.ObjectId],
+            type: [String],
             default: [],
         },
         overallCompletionPercentage: {

@@ -7,6 +7,7 @@ export const courseCreatedConsumer = async (
 ) => {
 
     try {
+        console.log(data,"This is the  course for the payment service")
 
         await createCourse(data);
 

@@ -1,4 +1,4 @@
-import { PaymentEntity } from "../../../domain/entities";
+import { PaymentEntity, paymentType } from "../../../domain/entities";
 import { Payment } from "../models";
 import { Types } from "mongoose";
 
@@ -13,7 +13,8 @@ const mapPaymentToEntity = (payment: any): PaymentEntity => {
       createdAt: payment.createdAt?.toISOString(),
       updatedAt: payment.updatedAt?.toISOString(),
       course: payment.course,
-      user: payment.user
+      user: payment.user,
+      type:paymentType.debit
     };
 };
 
@@ -28,7 +29,8 @@ export const createPayment = async (
         const existing = await Payment.findOne({ 
             userId: userId, 
             courseId: courseId,
-            status: data.status  
+            status: data.status,
+            type:paymentType.debit  
         });
 
         if (existing) {
@@ -38,7 +40,8 @@ export const createPayment = async (
         const newPayment = await Payment.create({
             ...data,
             userId,
-            courseId
+            courseId,
+            type:paymentType.debit
         });
 
         if (!newPayment) {

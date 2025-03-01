@@ -3,9 +3,9 @@ import { IDependencies } from "../../interfaces/IDepndencies";
 export const getCourseByInstructorUseCase = (dependencie:IDependencies) =>{
     const {repositories:{getCourseByInstructor}}=dependencie;
     return {
-        execute:async(id:string)=>{
+        execute:async(data:{id:string,page:string,limit:string})=>{
             try{
-                return await getCourseByInstructor(id)
+                return await getCourseByInstructor(data)
             }
             catch(error:unknown){
                 if(error instanceof Error){

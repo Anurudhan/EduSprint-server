@@ -2,7 +2,7 @@ import mongoose, { Schema, model } from "mongoose";
 import { UserEntity } from "../../../domain/entities";
 
 
-const userSchema = new Schema(
+export const userSchema = new Schema(
 	{
 		firstName: {
 			type: String,

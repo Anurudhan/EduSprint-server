@@ -1,8 +1,8 @@
 import jwt, { TokenExpiredError, JsonWebTokenError } from "jsonwebtoken";
-import { generateAccessToken } from "../../../_lib/http/jwt";
 import { Request, Response, NextFunction } from "express";
-import { UserPayload } from "../../http/jwt/IUserPayload";
-import { env_variables } from "../../../_boot/config";
+import { generateAccessToken, UserPayload } from "../../http/jwt";
+import { HttpStatusCode } from "../HttpStatusCode";
+import { Role } from "../../../domain/entities";
 
 declare global {
   namespace Express {
@@ -24,45 +24,51 @@ const verifyToken = (token: string, secret: string): UserPayload | null => {
   }
 };
 
-export const jwtMiddleware = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<any> => {
-  try {
-    const { access_token, refresh_token } = req.cookies;
-    let user: UserPayload | null = null;
+export const jwtMiddleware = (role?: Role) => {
+  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { access_token, refresh_token } = req.cookies;
+      let user: UserPayload | null = null;
 
-    if (access_token) {
-      user = verifyToken(access_token, env_variables.ACCESS_TOKEN_SECRET!);
-    }
-
-    if (!user && refresh_token) {
-      user = verifyToken(refresh_token, env_variables.REFRESH_TOKEN_SECRET!);
-      if (user) {
-        const newAccessToken = generateAccessToken({
-          _id: user._id,
-          email: user.email,
-          role: user.role,
-        });
-        res.cookie("access_token", newAccessToken, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "none",
-        });
+      if (access_token) {
+        user = verifyToken(access_token, process.env.ACCESS_TOKEN_SECRET!);
       }
-    }
 
-    if (!user) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized, please log in again." });
-    }
+      if (!user && refresh_token) {
+        user = verifyToken(refresh_token, process.env.REFRESH_TOKEN_SECRET!);
+        if (user) {
+          const newAccessToken = generateAccessToken({
+            _id: user._id,
+            email: user.email,
+            role: user.role,
+          });
+          res.cookie("access_token", newAccessToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+          });
+        }
+      }
 
-    req.user = user;
-    next();
-  } catch (error) {
-    console.error("Error in JWT middleware:", error);
-    return res.status(500).json({ message: "Internal server error." });
-  }
+      if (!user) {
+        res
+          .status(HttpStatusCode.UNAUTHORIZED)
+          .json({ message: "Unauthorized, please log in again." });
+        return;
+      }
+
+      if (role && user.role !== role) {
+        res
+          .status(HttpStatusCode.UNAUTHORIZED)
+          .json({ message: "Unauthorized, insufficient permissions." });
+        return;
+      }
+
+      req.user = user;
+      next();
+    } catch (error) {
+      console.error("Error in JWT middleware:", error);
+      res.status(500).json({ message: "Internal server error." });
+    }
+  };
 };

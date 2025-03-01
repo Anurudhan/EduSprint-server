@@ -7,15 +7,15 @@ export const getCourseByInstructorController = (dependencie:IDependencies) =>{
     return async(req:Request,res:Response,next:NextFunction)=>{
         try {
             console.log(req.params)
-            const {id}=req.params
-            if (!id) {
+            const {instructorId,page,limit}=req.query
+            if (!instructorId) {
                 res.status(httpStatusCode.BAD_REQUEST).json({
                     success: false,
                     message: "Instructor ID is required",
                 });
 
             }
-            const result = await getCourseByInstructorUseCase(dependencie).execute(id as string)
+            const result = await getCourseByInstructorUseCase(dependencie).execute({id:instructorId as string,page:page?page as string:"1",limit:limit?limit as string:"6"})
            res.status(httpStatusCode.OK).json({success:true,message:"Course get",data:result})
           
             

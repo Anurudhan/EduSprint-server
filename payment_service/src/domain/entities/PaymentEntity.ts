@@ -1,7 +1,10 @@
 import { Date, Types } from "mongoose";
 import { CourseEntity } from "./CourseEntity";
 import { UserEntity } from "./UserEntity";
-
+export enum paymentType{
+    credit="credit",
+    debit="debit"
+}
 export interface PaymentEntity {
     _id?: Types.ObjectId;
     userId: Types.ObjectId;
@@ -9,7 +12,7 @@ export interface PaymentEntity {
     method?: string;
     status: string;
     amount: number;
-    type?: "credit" | "debit";
+    type?: paymentType;
     createdAt?:string | Date;
     updatedAt?:string | Date;
     course?:CourseEntity;

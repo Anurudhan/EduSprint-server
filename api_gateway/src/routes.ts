@@ -1,6 +1,7 @@
 import { Application, Request, Response } from "express";
 import proxy from "express-http-proxy";
 import { Service } from "./config";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 export const routes = (app: Application) => {
   app.get("/health", (req: Request, res: Response) => {
@@ -43,20 +44,14 @@ export const routes = (app: Application) => {
     })
   );
 
-  app.use(
-    "/chat",
-    proxy(Service.CHAT_SERVICE_URL, {
-      proxyReqPathResolver: (req) => req.url,
-      userResDecorator: async (proxyRes, proxyResData, req, res) => {
-        res.status(proxyRes.statusCode??500);
-        return proxyResData;
-      },
-      proxyErrorHandler: (err, res, next) => {
-        console.error("Proxy Error:", err.message);
-        res.status(500).json({ success: false, message: "Internal Server Error" });
-      },
-    })
-  );
+  app.use('/chat', createProxyMiddleware({
+    target: Service.CHAT_SERVICE_URL,
+    changeOrigin: true,
+    ws: true, // Enable WebSocket proxying
+    pathRewrite: {
+      '^/chat': '',
+    },
+  }));
 
   app.use(
     "/course",

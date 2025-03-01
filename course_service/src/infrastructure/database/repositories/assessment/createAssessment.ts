@@ -9,12 +9,7 @@ export const createAssessment = async (data: AssessmentEntity): Promise<Assessme
     let result: AssessmentEntity | null = null;
 
     if (existingAssessment) {
-      await AssessmentModel.updateOne(
-        { courseId: data.courseId },
-        { $set: data, updatedAt: new Date() }
-      );
-      result = { ...existingAssessment.toObject(), ...data }; // Merge the existing and updated data
-      console.log("Assessment updated successfully.");
+      return null
     } else {
       const newAssessment = new AssessmentModel(data);
       result = await newAssessment.save();

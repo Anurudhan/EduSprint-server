@@ -1,5 +1,5 @@
-import { ChatEntity } from "../entities";
+import { IndividualChatEntity } from "../entities";
 
 export interface ICreateChatUseCase{
-    execute(data:ChatEntity):Promise<ChatEntity|null>;
+    execute(data:IndividualChatEntity):Promise<IndividualChatEntity>;
 }

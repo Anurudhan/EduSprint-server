@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { IDependencies } from "../../app/interfaces/IDependencies";
 import { controllers } from "../../presentation/controllers";
+import { protectRouter } from "../../_lib/middleware/protectRouter";
 
 export const routers = (dependancies:IDependencies ) => {
     const {
@@ -11,9 +12,9 @@ export const routers = (dependancies:IDependencies ) => {
     } = controllers(dependancies);
 
     const router = Router()
-    router.route("/").post(createChat);
-    router.route("/message").post(createMessage);
-    router.route("/message/:chatId").get(getMessagesByChatId);
-    router.route("/user/:userId").post(getChatsByUserId)
+    router.route("/").post(protectRouter(),createChat);
+    router.route("/message").post(protectRouter(),createMessage);
+    router.route("/message/:chatId").get(protectRouter(),getMessagesByChatId);
+    router.route("/user").get(protectRouter(),getChatsByUserId)
     return router;
 }

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { IDependencies } from "../../../application/interfaces/IDepndencies"
 import { httpStatusCode } from "../../../_lib/http";
+import createCourseProduce from "../../../infrastructure/kafka/producers/createCourseProduce";
 
 export const addCourseController = (dependencie:IDependencies) =>{
     const {useCases:{createCourseUseCase}} = dependencie;
@@ -11,6 +12,7 @@ export const addCourseController = (dependencie:IDependencies) =>{
             if(!course){
                 res.status(httpStatusCode.BAD_REQUEST).json({success:false,message:"course creating time facing server error!",data:req.body});
             }
+            await createCourseProduce(course)
             res.status(httpStatusCode.OK).json({success:true,message:"course created successfully",data:req.body});
         } catch (error:unknown) {
             if (error instanceof Error) {

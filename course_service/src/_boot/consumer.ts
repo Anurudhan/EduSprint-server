@@ -18,8 +18,14 @@ export const startConsumer = async () => {
 
                 const { key, value } = message;
 
+                console.log('Received key:', String(key),JSON.parse(String(value))); 
+
                 const subscriberMethod = String(key) as keyof ICourseSubscriber;
                 const subscriberData = JSON.parse(String(value));
+                if (!subscriber[subscriberMethod] || typeof subscriber[subscriberMethod] !== 'function') {
+                    console.error(`Invalid subscriber method: ${subscriberMethod}`);
+                    return; // Skip processing instead of throwing error
+                }
 
                 try {
                     await subscriber[subscriberMethod](subscriberData);
