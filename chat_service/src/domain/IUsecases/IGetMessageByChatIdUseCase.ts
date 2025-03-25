@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
-import { MessageEntity } from "../entities";
+import { IMessage } from "../entities";
 
 
 export interface IGetMessageByChatIdUseCase{
-    execute(id: string|Types.ObjectId): Promise<MessageEntity[] | null>;
+    execute(id: string|Types.ObjectId): Promise<IMessage[] | null>;
 }

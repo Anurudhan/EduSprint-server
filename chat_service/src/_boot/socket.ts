@@ -1,6 +1,6 @@
 import { Server as SocketIOServer, Socket } from "socket.io";
 import { Server as HTTPServer } from "http";
-import { Message } from "../infrastructure/database/model";
+import { Message }  from "../infrastructure/database/model";
 import { updateLastSeen } from "../infrastructure/database/repository";
 
 // Define a proper type for online users
@@ -30,7 +30,7 @@ export const socket = (server: HTTPServer) => {
     pingTimeout: 60000,
     pingInterval: 25000,
     // Transport options
-    transports: ['websocket', 'polling'],
+    transports: ['polling','websocket'],
     // Allow upgrades to websocket
     allowUpgrades: true,
   });

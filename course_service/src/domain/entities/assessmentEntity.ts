@@ -33,3 +33,23 @@ export enum QuestionType {
     updatedAt?: Date;
     isPublished: boolean;
   }
+
+  export interface AssessmentResult {
+    _id: string;
+    enrollmentId: string;
+    courseId: string;
+    lessonId: string;
+    assessmentId: string;
+    attempts: {
+      score: number;
+      passed: boolean;
+      completedAt: Date;
+      answers: { questionId: string; selectedAnswer: string; isCorrect: boolean }[];
+    }[];
+    bestScore: number;
+    totalPoints: number;
+    earnedPoints: number;
+    status: 'inProgress' | 'failed' | 'passed';
+    createdAt: Date;
+    updatedAt: Date;
+  }

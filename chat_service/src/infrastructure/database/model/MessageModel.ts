@@ -1,36 +1,29 @@
-import { Schema, model } from "mongoose";
-import { MessageEntity } from "../../../domain/entities";
+// models/Message.ts
+import mongoose from 'mongoose';
+import { contentType } from '../../../domain/entities';
 
-const messageSchema = new Schema<MessageEntity>({
-    chatId: {
-        type: Schema.Types.ObjectId,
-        ref: "chats",
-        required: true
-    },
-    senderId: {
-        type: Schema.Types.ObjectId,
-        ref: "users",
-        required: true
-    },
-    content: {
-        type: String,
-        required: true
-    },
-    contentType: {
-        type: String,
-        enum: ['text', 'image', 'audio', 'video', 'application'],
-        default: 'text'
-    },
-    receiverSeen: {
-        type: Boolean,
-        default: false
-    },
-    isDeleted: {
-        type: Boolean,
-        default: false,
-    }
-}, {
-    timestamps: true
-});
+const MessageSchema = new mongoose.Schema({
+  chatId: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat', required: true },
+  sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  content: { type: String, required: true },
+  contentType: { 
+    type: String, 
+    enum: contentType, 
+    default: contentType.text
+  },
+  fileUrl: { type: String },
+  replyTo: { type: mongoose.Schema.Types.ObjectId, ref: 'Message' },
+  isEdited: { type: Boolean, default: false },
+  isDeleted: { type: Boolean, default: false },
+  readBy: [{
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    readAt: { type: Date, default: Date.now }
+  }],
+  reactions: [{
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    emoji: { type: String }
+  }]
+}, { timestamps: true });
 
-export const Message = model("messages", messageSchema);
+
+export const Message = mongoose.model('Message', MessageSchema);

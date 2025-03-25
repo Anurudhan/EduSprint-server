@@ -48,7 +48,7 @@ export const protectRouter = (role?: Role) => {
           });
         }
       }
-
+      console.log(user, "this is the user")
       if (!user) {
         res
           .status(httpStatusCode.UNAUTHORIZED)

@@ -1,64 +1,27 @@
-import { model, Schema } from "mongoose";
-import { userSchema } from "./UserModel";
-import { ChatEntity } from "../../../domain/entities";
+import mongoose from "mongoose";
+import { ChatStatus, ChatType, SubscriptionType } from "../../../domain/entities";
 
-const chatSchema = new Schema({
-    // Store complete user objects instead of just IDs
-    participants:[{
-        type: Schema.Types.ObjectId,
-        ref: "users"
-    }],
-    
-    type: {
-        type: String,
-        enum: ['individual', 'group'],
-        default: 'individual',
-        required: true
-    },
-    status: {
-        type: String,
-        enum: ['requested', 'active', 'block'],
-        default: 'active'
-    },
-    lastSeen: {
-        type: Date
-    },
-    lastMessage: {
-        type: Schema.Types.Mixed, // Store the entire message object
-        default: null
-    },
-    unreadCounts: {
-        type: Number,
-        default: 0
-    },
-    subscriptionType: {
-        type: String,
-        enum: ["none", "basic", "standard", "premium"],
-        default: "basic"
-    },
-    // Group-specific fields
-    groupName: {
-        type: String
-    },
-    groupDescription: {
-        type: String
-    },
-    // Single participant - if needed for specific user info
-    participant:  {
-        type: Schema.Types.ObjectId,
-        ref: "users"
-    }
-}, {
-    timestamps: true
+const chatSchema = new mongoose.Schema({
+  chatType: { type: String, enum: Object.values(ChatType), required: true },
+  status: { type: String, enum: Object.values(ChatStatus), default: ChatStatus.requested },
+  subscriptionType: { type: String, enum: Object.values(SubscriptionType), default: SubscriptionType.none },
+  participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }],
+  admins: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  name: { type: String, default: null }, // Allow null explicitly
+  avatar: { type: String, default: null }, // Allow null explicitly
+  lastMessage: {
+    messageId: { type: String },
+    content: { type: String },
+    sender: { type: String },
+    timestamp: { type: Date },
+  },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+  isActive: { type: Boolean, default: true },
+  unreadCount: [{
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    count: { type: Number, default: 0 },
+  }],
 });
 
-// Validation for group chats
-chatSchema.pre('save', function(next) {
-    if (this.type === 'group' && !this.groupName) {
-        const error = new Error('Group name is required for group chats');
-        return next(error);
-    }
-    next();
-});
-
-export const Chat = model<ChatEntity>("chats", chatSchema);
+export const Chat = mongoose.model("Chat", chatSchema);

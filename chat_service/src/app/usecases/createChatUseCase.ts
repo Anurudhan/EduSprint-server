@@ -1,4 +1,4 @@
-import {  IndividualChatEntity } from "../../domain/entities";
+import { IChat } from "../../domain/entities";
 import { IDependencies } from "../interfaces/IDependencies";
 
 
@@ -8,9 +8,9 @@ export const createChatUseCase = (dependencies: IDependencies) => {
     } = dependencies;
 
     return {
-        execute: async (data: IndividualChatEntity) => {
+        execute: async (data: IChat) => {
             const isExisting = await existingChat(data)
-            if(isExisting) return isExisting;
+            if(isExisting) return null;
             return await createChat(data);
         }
     }

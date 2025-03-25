@@ -10,7 +10,7 @@ import { startConsumer } from "./_boot/consumer";
 
     // Initialize socket.io with the HTTP server
     const io = socket(server);
-
+    console.log(io, "this is the connection")
     // Connect to database and start consumer
     await Promise.all([database(), startConsumer()])
 

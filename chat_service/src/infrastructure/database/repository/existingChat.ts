@@ -1,30 +1,39 @@
 import { Types } from "mongoose";
 import ErrorResponse from "../../../_lib/common/errorResponse";
-import { IndividualChatEntity, ChatType } from "../../../domain/entities";
+import { IChat, ChatType } from "../../../domain/entities";
 import { Chat } from "../model";
 
-export const existingChat = async (data: IndividualChatEntity) => {
+export const existingChat = async (data: IChat): Promise<IChat | null> => {
     try {
-        if (data.type !== ChatType.individual || data.participants.length !== 2) {
+        if (data.chatType !== ChatType.individual || data.participants.length !== 2) {
             return null;
         }
-
         
-        const participantIds = data.participants.map(p => {
-            if (typeof p === "string") {
-                return new Types.ObjectId(p);
-            } else if (p && p._id) {
-                return typeof p._id === "string" ? new Types.ObjectId(p._id) : p._id;
-            }
-            return null;
-        }).filter(id => id !== null);
+        // Convert participants to ObjectId if they are strings
+        const participantIds = data.participants.map(id => 
+            typeof id === "string" ? new Types.ObjectId(id) : id
+        );
         
         const chat = await Chat.findOne({
-            type: ChatType.individual,
+            chatType: ChatType.individual,
             "participants": { $all: participantIds }
-        })
-
-        return chat?chat as IndividualChatEntity :null;
+        });
+        
+        if (!chat) return null;
+        
+        // Transform to ensure type compatibility with IChat interface
+        const chatObj = chat.toObject();
+        
+        // Ensure unreadCount is properly mapped
+        const transformedChat: IChat = {
+            ...chatObj,
+            unreadCount: chatObj.unreadCount.map(item => ({
+                userId: item.userId || null, // Handle the possibility of undefined
+                count: item.count
+            }))
+        };
+        
+        return transformedChat;
     } catch (error: any) {
         throw ErrorResponse.internalError(error?.message || "Something went wrong!");
     }

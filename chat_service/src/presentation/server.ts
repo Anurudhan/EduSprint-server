@@ -22,11 +22,18 @@ console.log(FRONTEND_URL, "=======chat frontend URL=========");
 const app: Application = express();
 
 const corsOptions = {
-  origin: [FRONTEND_URL, "http://localhost:5173"], // Add common development URLs
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  origin: [FRONTEND_URL, "http://localhost:5173"], // Allow frontend origins
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  credentials: true, // Allow cookies in CORS requests
+  preflightContinue: false, // Ensure preflight requests are responded to automatically
+  optionsSuccessStatus: 204, // Respond with 204 (No Content) to OPTIONS
 };
+
+app.use(cors(corsOptions));
+
+// Manually handle OPTIONS requests if needed
+app.options("*", cors(corsOptions));
 
 // Middleware
 app.use(express.json());
@@ -36,8 +43,10 @@ app.use(morgan("dev"));
 // Modify helmet to allow WebSocket connections
 app.use(helmet({
   contentSecurityPolicy: false, // Disable CSP for WebSocket connections
+  crossOriginResourcePolicy: { policy: "cross-origin" }, // Allow cross-origin requests
 }));
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 // Health check endpoint
 app.get("/chat/test", (req: Request, res: Response) => {

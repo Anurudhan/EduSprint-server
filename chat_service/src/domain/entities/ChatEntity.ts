@@ -1,6 +1,4 @@
-import { MessageEntity } from "./MessageEntity";
-import { Role, UserEntity } from "./UserEntity";
-
+import mongoose from "mongoose";
 
 export enum SubscriptionType {
     none = "none",
@@ -20,42 +18,26 @@ export enum ChatType {
     group = "group"
 }
 
-interface BaseChatEntity {
-    _id?: string;
-    type: ChatType;
+export interface IChat {
+    _id?: string | mongoose.Types.ObjectId;
+    chatType: ChatType;
     status?: ChatStatus;
-    lastSeen?: Date | string;
-    lastMessage?: MessageEntity;
-    unreadCounts?: number;
     subscriptionType?: SubscriptionType;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-    participant?:(string|UserEntity);
+    participants: string[] | mongoose.Types.ObjectId[];
+    admins?: string[] | mongoose.Types.ObjectId[];
+    name?: string | null; 
+    avatar?: string | null;
+    lastMessage?: {
+        messageId?: string | null;
+        content?: string | null;
+        sender?: string | null;
+        timestamp?: Date | null;
+    } | null;
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;
+    unreadCount: Array<{
+        userId: string | mongoose.Types.ObjectId | null;
+        count: number;
+    }>;
 }
-
-export interface IndividualChatEntity extends BaseChatEntity {
-    type: ChatType.individual;
-    participants: (string|UserEntity)[]; 
-}
-
-export interface GroupChatEntity extends BaseChatEntity {
-    type: ChatType.group;
-    participants: (string|UserEntity)[]; 
-    groupName: string;
-    groupDescription?: string | null;
-}
-
-// Create a UI-specific type that extends the base types
-export interface UIChatEntity extends Omit<ChatEntity, '_id'> {
-    chatId: string;
-    name: string;
-    avatar:string|File;
-    role:Role;
-    receiverId: string;
-    isOnline?: boolean;
-    roomId?: string;
-    groupName?: string;
-    groupDescription?: string | null;
-  }
-
-export type ChatEntity = IndividualChatEntity | GroupChatEntity;

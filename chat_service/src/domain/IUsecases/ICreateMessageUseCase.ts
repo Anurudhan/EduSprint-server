@@ -1,5 +1,5 @@
-import { MessageEntity } from "../entities";
+import { IMessage } from "../entities";
 
 export interface ICreateMessageUseCase{
-    execute(data:MessageEntity):Promise<MessageEntity|null>;
+    execute(data:IMessage):Promise<IMessage|null>;
 }

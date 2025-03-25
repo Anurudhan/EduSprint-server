@@ -10,9 +10,10 @@ import {
   IGetCourseInstructorUseCase,
   IGetEnrollmentByIdUseCase,
   IGetEnrollmentByUserIdUseCase,
+  IStreamVideoUseCase,
   IUpdateEnrollmentUseCase,
 } from "../../domain/IUseCases";
-import { ICreateAssessmentUseCase, IGetAssessmentByCourseIdUseCase, IGetAssessmentByLessonIdUseCase } from "../../domain/IUseCases/IAssessment";
+import { ICreateAssessmentResultUseCase, ICreateAssessmentUseCase, IGetAssessmentByCourseIdUseCase, IGetAssessmentByLessonIdUseCase, IGetAssessmentResultByEnrollementIdUseCase } from "../../domain/IUseCases/IAssessment";
 
 import { IDependencies } from "./IDepndencies";
 
@@ -28,6 +29,7 @@ export interface IUseCases {
   getCourseByInstructorUseCase:(dependencies:IDependencies) => IGetCourseInstructorUseCase;
   getCourseByIdUseCase:(dependencie:IDependencies)=>IGetCourseById;
   getAllCourseUseCase:(dependencie:IDependencies) =>IGetAllCourseUseCase;
+  streamVideoUseCase:(dependencie:IDependencies) => IStreamVideoUseCase;
 
   createEnrollmentUseCase: (dependencies: IDependencies) => ICreateEnrollmentUseCase; 
   updateEnrollmentUseCase: (dependencies: IDependencies) => IUpdateEnrollmentUseCase; 
@@ -35,7 +37,9 @@ export interface IUseCases {
   getEnrollmentByIdUseCase: (dependencies: IDependencies) => IGetEnrollmentByIdUseCase;
 
   createAssessmentUseCase:(depencies:IDependencies) => ICreateAssessmentUseCase;
+  createAssessmentResultUseCase:(depencies:IDependencies) => ICreateAssessmentResultUseCase;
   updateAssessmentUseCase:(depencies:IDependencies) => ICreateAssessmentUseCase;
   getAssessmentByLessonIdUseCase:(dependencies:IDependencies) =>IGetAssessmentByLessonIdUseCase ;
   getAssessmentByCourseIdUseCase:(dependencies:IDependencies) =>IGetAssessmentByCourseIdUseCase ;
+  getAssessmentResultByEnrollmentIdUseCase:(dependencies:IDependencies) =>IGetAssessmentResultByEnrollementIdUseCase ;
 }

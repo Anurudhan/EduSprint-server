@@ -2,7 +2,7 @@ import { Date, Types } from "mongoose";
 import { CategoryEntity } from "./categoryEntity";
 import { UserEntity } from "./userEntity";
 
-interface Lesson {
+interface   Lesson {
     lessonNumber: string,
     title: string;
     description: string;

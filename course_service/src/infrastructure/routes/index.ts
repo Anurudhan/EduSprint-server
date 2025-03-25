@@ -9,9 +9,9 @@ export const routes = (dependencie:IDependencies)=>{
     const {createCategory,editCategory,
         getAllCategory,addCourse,getCourseByInstructor
         ,getCourseById,updateCourse,getAllCourse,
-        createEnrollment,getEnrollmentByUserId,
+        createEnrollment,getEnrollmentByUserId,getEnrollmentById,
     createAssessment,getAssessment,updateEnrollment,
-updateAssessment} = controller(dependencie)
+updateAssessment,getAssessmentResult,createAssessmentResult,streamVideo} = controller(dependencie)
 
     router.route("/create-category").post(protectRouter(Role.admin),createCategory);
     router.route("/update-category").post(protectRouter(Role.admin),editCategory);
@@ -22,12 +22,13 @@ updateAssessment} = controller(dependencie)
     router.route("/instructor-courses").get(protectRouter(Role.teacher),getCourseByInstructor);
     router.route("/updatecourse").post(protectRouter(Role.teacher),updateCourse);
     router.route("/allcourse").get(getAllCourse);
+    router.route("/video/stream/:courseId/:lessonId").get(streamVideo)
 
     router.route("/enrollment").post(protectRouter(),createEnrollment).put(protectRouter(),updateEnrollment)
-    router.route("/enrollment/:id").get();
+    router.route("/enrollment/:enrollmentId").get(protectRouter(),getEnrollmentById);
     router.route("/enrollment/user/:userId").get(protectRouter(),getEnrollmentByUserId);
 
-    router.route("/assessment").get(protectRouter(),getAssessment).post(protectRouter(Role.teacher),createAssessment).put(protectRouter(Role.teacher),updateAssessment)
-
+    router.route("/assessment").get(protectRouter(),getAssessment).post(protectRouter(Role.teacher),createAssessment).put(protectRouter(Role.teacher),updateAssessment);
+    router.route("/assessment-results").get(protectRouter(),getAssessmentResult).post(protectRouter(Role.student),createAssessmentResult)
     return router
 }

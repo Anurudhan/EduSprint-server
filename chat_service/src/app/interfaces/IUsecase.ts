@@ -1,5 +1,4 @@
-import { ChatEntity } from "../../domain/entities";
-import { ICreateChatUseCase, ICreateMessageUseCase, IGetChatsByUserIdUseCase, IGetMessageByChatIdUseCase } from "../../domain/IUsecases";
+import { ICreateChatUseCase, ICreateMessageUseCase, IGetChatsByUserIdUseCase, IGetChatUsersByIdsUseCase, IGetMessageByChatIdUseCase } from "../../domain/IUsecases";
 import { IDependencies } from "./IDependencies";
 
 export interface IUsecase{
@@ -7,4 +6,5 @@ export interface IUsecase{
     createMessageUseCase:(dependencies:IDependencies) => ICreateMessageUseCase;
     getChatsByUserIdUseCase: (dependencies: IDependencies) => IGetChatsByUserIdUseCase;
     getMessagesByChatIdUseCase:(dependencies: IDependencies) => IGetMessageByChatIdUseCase;
+    getChatUsersByIdsUseCase:(dependencies:IDependencies) => IGetChatUsersByIdsUseCase;
 }

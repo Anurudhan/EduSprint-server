@@ -8,8 +8,9 @@ export const getEnrollmentByIdUseCase = (dependencies: IDependencies) => {
     } = dependencies;
 
     return {
-        execute: async (userId: string):Promise<EnrollmentEntity|null> => {
-            return await getEnrollmentById(userId);
+        execute: async (enrollmentId: string):Promise<EnrollmentEntity|null> => {
+
+            return await getEnrollmentById(enrollmentId);
         }
     }
     

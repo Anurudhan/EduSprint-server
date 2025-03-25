@@ -3,6 +3,7 @@ import { getMessagesByChatId } from "../../infrastructure/database/repository";
 import { createChatController } from "./createChatController";
 import { createMessageController } from "./createMessageController";
 import { getChatsByUserIdController } from "./getChatsByUserIdController";
+import { getChatUsersByIdsController } from "./getChatUsersByIdsController";
 import { getMessagesByChatIdController } from "./getMessageByChatIdController";
 
 export const controllers = (dependancies:IDependencies) =>{
@@ -10,6 +11,7 @@ export const controllers = (dependancies:IDependencies) =>{
         createChat:createChatController(dependancies),
         createMessage:createMessageController(dependancies),
         getChatsByUserId:getChatsByUserIdController(dependancies),
-        getMessagesByChatId:getMessagesByChatIdController(dependancies)
+        getMessagesByChatId:getMessagesByChatIdController(dependancies),
+        getChatUsersByIds:getChatUsersByIdsController(dependancies)
     }
 }

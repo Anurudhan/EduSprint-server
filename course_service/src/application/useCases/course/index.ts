@@ -3,3 +3,4 @@ export * from "./updateCourseUseCase";
 export * from "./getCourseByInstructorUseCase";
 export * from "./getCourseByIdUseCase";
 export * from "./getAllCourseUseCase";
+export * from "./streamVideoUseCase";

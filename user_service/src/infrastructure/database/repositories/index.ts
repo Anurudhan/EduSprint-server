@@ -2,3 +2,8 @@ export * from "./getAllInstructors";
 export * from "./createUser";
 export * from "./getAllStudents";
 export * from "./updateUser";
+export * from "./createBanner";
+export * from "./getBanners";
+export * from "./updateBanner";
+export * from "./deleteBanner";
+export * from "./getActiveBanners";

@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 import { IDependencies } from "../../../application/interfaces/IDepndencies";
 
-export const getEnrollmentByUserIdController = (dependancies: IDependencies) => {
+export const    getEnrollmentByUserIdController = (dependancies: IDependencies) => {
     const { useCases: {getEnrollmentByUserIdUseCase} } = dependancies
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -12,6 +12,7 @@ export const getEnrollmentByUserIdController = (dependancies: IDependencies) => 
 
             const result = await getEnrollmentByUserIdUseCase(dependancies)
                 .execute(userId);
+                console.log(result, " this  is the result of the enrollment")
                 if(result  === null){
                     res.status(404).json({
                         success: false,

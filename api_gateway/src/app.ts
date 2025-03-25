@@ -4,8 +4,10 @@ import morgan from "morgan";
 import { applySecurityMiddleware } from "./middleware/security";
 import { routes } from "./routes";
 import { logger } from "./utilities/logger";
+import http,{ Server } from "http";
 
 const app: Application = express();
+const server = http.createServer(app)
 
 // Middleware
 const morganStream = {
@@ -20,6 +22,6 @@ app.use(cookieParser());
 applySecurityMiddleware(app);
 
 
-routes(app);
+routes(app,server);
 
 export default app;

@@ -2,8 +2,9 @@ import { Application, Request, Response } from "express";
 import proxy from "express-http-proxy";
 import { Service } from "./config";
 import { createProxyMiddleware } from "http-proxy-middleware";
+import { Server, IncomingMessage, ServerResponse } from "http";
 
-export const routes = (app: Application) => {
+export const routes = (app: Application,server:Server) => {
   app.get("/health", (req: Request, res: Response) => {
     res.status(200).json({ status: "API Gateway is running" });
   });
@@ -44,14 +45,8 @@ export const routes = (app: Application) => {
     })
   );
 
-  app.use('/chat', createProxyMiddleware({
-    target: Service.CHAT_SERVICE_URL,
-    changeOrigin: true,
-    ws: true, // Enable WebSocket proxying
-    pathRewrite: {
-      '^/chat': '',
-    },
-  }));
+
+
 
   app.use(
     "/course",

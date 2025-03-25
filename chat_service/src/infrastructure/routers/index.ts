@@ -8,13 +8,15 @@ export const routers = (dependancies:IDependencies ) => {
         createChat,
         createMessage,
         getChatsByUserId,
+        getChatUsersByIds,
         getMessagesByChatId
     } = controllers(dependancies);
 
     const router = Router()
     router.route("/").post(protectRouter(),createChat);
     router.route("/message").post(protectRouter(),createMessage);
-    router.route("/message/:chatId").get(protectRouter(),getMessagesByChatId);
+    router.route("/messages").get(protectRouter(),getMessagesByChatId);
     router.route("/user").get(protectRouter(),getChatsByUserId)
+    router.route("/users").get(protectRouter(),getChatUsersByIds)
     return router;
 }

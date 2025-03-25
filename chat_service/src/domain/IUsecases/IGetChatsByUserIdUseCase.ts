@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
-import { ChatEntity, IndividualChatEntity } from "../entities";
+import {IChat } from "../entities";
 
 
 export interface IGetChatsByUserIdUseCase{
-    execute(id: string|Types.ObjectId): Promise<IndividualChatEntity[] | null>;
+    execute(id: string|Types.ObjectId): Promise<IChat[] | null>;
 }

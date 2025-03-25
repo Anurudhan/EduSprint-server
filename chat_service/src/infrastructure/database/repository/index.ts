@@ -5,3 +5,5 @@ export * from "./getChatsByUserId";
 export * from "./getChatById";
 export * from "./getMessagesByChatId";
 export * from "./existingChat";
+export * from "./createUser";
+export * from "./getChatUsersByIds";

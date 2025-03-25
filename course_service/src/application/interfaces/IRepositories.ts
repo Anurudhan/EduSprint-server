@@ -1,5 +1,5 @@
 import { Interface } from "readline";
-import { AssessmentEntity, CategoryEntity, CourseEntity, EnrollmentEntity, filterEntity, pageEntity, PaginationMeta } from "../../domain/entities"
+import { AssessmentEntity, AssessmentResult, CategoryEntity, CourseEntity, EnrollmentEntity, filterEntity, pageEntity, PaginationMeta } from "../../domain/entities"
 
 export interface IRepositories{
     createCategory: (data: CategoryEntity) => Promise < CategoryEntity>;
@@ -11,14 +11,17 @@ export interface IRepositories{
     getCourseByInstructor:(data:{id:string,page:string,limit:string}) => Promise <{courses:CourseEntity[],totalPages:string}>;
     getCourseById:(id:string) => Promise <CourseEntity|null>;
     getAllCourse:(data:{page?:number;limit?:number;filters?:filterEntity}) => Promise <{courses:CourseEntity[],totalCourses:number}>;
+    streamVideo:(courseId:string) => Promise<CourseEntity|null>;
 
     createEnrollment: (data: EnrollmentEntity) => Promise <EnrollmentEntity | null>;
     updateEnrollment: (data: EnrollmentEntity) => Promise <EnrollmentEntity | null>;
     getEnrollmentByUserId: (userId: string) => Promise<EnrollmentEntity[] | null>;
-    getEnrollmentById:(id:string) => Promise<EnrollmentEntity|null>;
+    getEnrollmentById:(enrollmentId:string) => Promise<EnrollmentEntity|null>;
 
     createAssessment:(data:AssessmentEntity) => Promise <AssessmentEntity|null>;
+    createAssessmentResult:(data:AssessmentResult) => Promise <AssessmentResult|null>;
     getAssessmentByLessonId:({ courseId, lessonId }: { courseId: string; lessonId: string }) => Promise <AssessmentEntity|null>;
     getAssessmentByCourseId:({courseId}:{courseId:string}) => Promise <AssessmentEntity[]|null>;
+    getAssessmentResultByEnrollmentId:({enrollmentId}:{enrollmentId:string}) => Promise <AssessmentResult|null>;
     updateAssessment:(data:AssessmentEntity) => Promise <AssessmentEntity|null>;
 } 

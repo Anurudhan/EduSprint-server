@@ -7,10 +7,10 @@ export const getEnrollmentByIdController = (dependancies: IDependencies) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
 
-            const {id} = req.params
+            const {enrollmentId} = req.params;
 
             const result = await getEnrollmentByIdUseCase(dependancies)
-                .execute(id);
+                .execute(enrollmentId);
 
             res.status(200).json({
                 success: true,
