@@ -37,6 +37,7 @@ export const getEnrollmentById = async (
                 courseId: 1,
                 progress: 1,
                 completionStatus: 1,
+                enrolledAt:1,
                 course: {
                   _id: 1,
                   title: 1,

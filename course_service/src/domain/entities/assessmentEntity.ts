@@ -39,6 +39,7 @@ export enum QuestionType {
     enrollmentId: string;
     courseId: string;
     lessonId: string;
+    userId:string;
     assessmentId: string;
     attempts: {
       score: number;

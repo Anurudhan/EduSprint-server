@@ -11,7 +11,7 @@ export const getAssessmentResultController = (dependencie:IDependencies)=>{
             if(!enrollmentId){
                 res.status(httpStatusCode.UNAUTHORIZED).json({success:false,data:null,message:"there is not enrollementId"});
             }
-            const result = await getAssessmentResultByEnrollmentIdUseCase(dependencie).execute({enrollmentId})
+            const result = await getAssessmentResultByEnrollmentIdUseCase(dependencie).execute({enrollmentId});
             if(!result){
                 res.status(httpStatusCode.UNAUTHORIZED).json({success:false,data:null,message:"the result geting is failesd"});
             }

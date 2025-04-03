@@ -5,6 +5,7 @@ const assessmentResultSchema = new Schema({
   enrollmentId: { type: String, required: true },
   courseId: { type: String, required: true },
   lessonId: { type: String, required: true },
+  userId:{ type: String, required: true },
   assessmentId: { type: String, required: true },
   attempts: [{
     score: { type: Number, required: true },

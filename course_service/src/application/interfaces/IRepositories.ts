@@ -22,6 +22,6 @@ export interface IRepositories{
     createAssessmentResult:(data:AssessmentResult) => Promise <AssessmentResult|null>;
     getAssessmentByLessonId:({ courseId, lessonId }: { courseId: string; lessonId: string }) => Promise <AssessmentEntity|null>;
     getAssessmentByCourseId:({courseId}:{courseId:string}) => Promise <AssessmentEntity[]|null>;
-    getAssessmentResultByEnrollmentId:({enrollmentId}:{enrollmentId:string}) => Promise <AssessmentResult|null>;
+    getAssessmentResultByEnrollmentId:({enrollmentId}:{enrollmentId:string}) => Promise <AssessmentResult[]|[]>;
     updateAssessment:(data:AssessmentEntity) => Promise <AssessmentEntity|null>;
 } 

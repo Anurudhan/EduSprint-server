@@ -3,15 +3,15 @@ import { AssessmentEntity, AssessmentResult } from "../../../../domain/entities"
 import AssessmentModel from "../../models/assessmentModel";
 import { AssessmentResultModel } from "../../models/assessmentResult";
 
-export const getAssessmentResultByEnrollmentId = async ({enrollmentId}:{enrollmentId:string}): Promise<AssessmentResult| null> => {
+export const getAssessmentResultByEnrollmentId = async ({enrollmentId}:{enrollmentId:string}): Promise<AssessmentResult[]| []> => {
   try {
     const objectIdEnrollmentId = new Types.ObjectId(enrollmentId);
-    const result = await AssessmentResultModel.findOne({
+    const result = await AssessmentResultModel.find({
         enrollmentId: objectIdEnrollmentId
       });
-    return result?result:null;
+    return result?result:[];
   } catch (error: unknown) {
     console.log(error);
-    return null; 
+    return []; 
   }
 };
