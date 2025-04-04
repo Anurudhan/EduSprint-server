@@ -13,6 +13,7 @@ export const startConsumer = async () => {
 
         const subscriber = createSubscriber();
 
+        
         await consumer.run({
 
             eachMessage: async ({ message }) => {
