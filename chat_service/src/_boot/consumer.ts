@@ -20,6 +20,7 @@ export const startConsumer = async () => {
                 const { key, value } = message;
 
                 const subscriberMethod = String(key) as keyof IChatSubscriber;
+                
                 const subscriberData = JSON.parse(String(value));
 
                 try {

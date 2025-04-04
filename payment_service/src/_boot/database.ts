@@ -9,6 +9,7 @@ export default async () => {
 		if (!mongoUrl) {
 			throw new Error(
 				"MongoDB connection string not provided in environment variables"
+				
 			);
 		}
 

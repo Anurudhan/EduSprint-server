@@ -16,6 +16,7 @@ export default async () => {
 
 		let res = await mongoose.connect(mongoUrl.trim());
 		if(res) console.log("🍃 MongoDB connected successfully ---> user-service 🍃");
+		
 	} catch (error: any) {
 		console.error(`❌ Database Connection failed❌`);
 		console.error(error.message);
