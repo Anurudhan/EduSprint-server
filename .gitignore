@@ -26,3 +26,5 @@ payment_service/.env
 chat_service/node_modules
 chat_service/logs
 chat_service/.env
+
+manifest/configMaps

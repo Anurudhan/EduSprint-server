@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edusprint-payment-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edusprint-payment-service
+  template:
+    metadata:
+      labels:
+        app: edusprint-payment-service
+    spec:
+      containers:
+        - image: anurudhan/edusprint-payment:latest
+          name: edusprint-payment-service
+          envFrom:
+            - configMapRef:
+                name: payment-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edusprint-payment-service
+spec:
+  selector:
+    app: edusprint-payment-service
+  ports:
+    - protocol: TCP
+      port: 5006
+      targetPort: 5006
+ 

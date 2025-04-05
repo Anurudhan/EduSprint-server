@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edusprint-auth-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edusprint-auth-service
+  template:
+    metadata:
+      labels:
+        app: edusprint-auth-service
+    spec:
+      containers:
+        - image: anurudhan/edusprint-auth:latest
+          name: edusprint-auth-service
+          envFrom:
+            - configMapRef:
+                name: auth-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edusprint-auth-service
+spec:
+  selector:
+    app: edusprint-auth-service
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: 5001
+ 

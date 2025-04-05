@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edusprint-course-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edusprint-course-service
+  template:
+    metadata:
+      labels:
+        app: edusprint-course-service
+    spec:
+      containers:
+        - image: anurudhan/edusprint-course:latest
+          name: edusprint-course-service
+          envFrom:
+            - configMapRef:
+                name: course-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edusprint-course-service
+spec:
+  selector:
+    app: edusprint-course-service
+  ports:
+    - protocol: TCP
+      port: 5005
+      targetPort: 5005
+ 

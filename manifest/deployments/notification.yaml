@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edusprint-notification-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edusprint-notification-service
+  template:
+    metadata:
+      labels:
+        app: edusprint-notification-service
+    spec:
+      containers:
+        - image: anurudhan/edusprint-notification:latest
+          name: edusprint-notification-service
+          envFrom:
+            - configMapRef:
+                name: notification-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edusprint-notification-service
+spec:
+  selector:
+    app: edusprint-notification-service
+  ports:
+    - protocol: TCP
+      port: 5004
+      targetPort: 5004
+ 

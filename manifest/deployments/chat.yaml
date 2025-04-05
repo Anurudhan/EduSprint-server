@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edusprint-chat-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edusprint-chat-service
+  template:
+    metadata:
+      labels:
+        app: edusprint-chat-service
+    spec:
+      containers:
+        - image: anurudhan/edusprint-chat:latest
+          name: edusprint-chat-service
+          envFrom:
+            - configMapRef:
+                name: chat-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edusprint-chat-service
+spec:
+  selector:
+    app: edusprint-chat-service
+  ports:
+    - protocol: TCP
+      port: 5003
+      targetPort: 5003
+ 

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edusprint-user-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edusprint-user-service
+  template:
+    metadata:
+      labels:
+        app: edusprint-user-service
+    spec:
+      containers:
+        - image: anurudhan/edusprint-user:latest
+          name: edusprint-user-service
+          envFrom:
+            - configMapRef:
+                name: user-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edusprint-user-service
+spec:
+  selector:
+    app: edusprint-user-service
+  ports:
+    - protocol: TCP
+      port: 5002
+      targetPort: 5002
+ 

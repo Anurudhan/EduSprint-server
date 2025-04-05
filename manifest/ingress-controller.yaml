@@ -1,0 +1,69 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-controller
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://edu-sprint.vercel.app"
+    nginx.ingress.kubernetes.io/enable-access-log: "true" 
+    nginx.ingress.kubernetes.io/websocket-services: "edusprint-chat-service"
+spec:
+  # ingressClassName: addon-http-application-routing
+  # ingressClassName: webapprouting.kubernetes.azure.com
+  # ingressClassName: nginx
+  rules:
+    - host: 3ac5108c8bfb4a1ea850.southindia.aksapp.io
+      http:
+        paths:
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: edusprint-auth-service
+                port:
+                  number: 5001
+          - path: /user
+            pathType: Prefix
+            backend:
+              service:
+                name: edusprint-user-service
+                port:
+                  number: 5002
+          - path: /notification
+            pathType: Prefix
+            backend:
+              service:
+                name: edusprint-notification-service
+                port:
+                  number: 5004
+          - path: /socket.io
+            pathType: Prefix
+            backend:
+              service:
+                name: edusprint-chat-service
+                port:
+                  number: 5006
+          - path: /course
+            pathType: Prefix
+            backend:
+              service:
+                name: edusprint-course-service
+                port:
+                  number: 5005
+          - path: /payment
+            pathType: Prefix
+            backend:
+              service:
+                name: edusprint-payment-service
+                port:
+                  number: 5006
+          - path: /chat
+            pathType: Prefix
+            backend:
+              service:
+                name: edusprint-chat-service
+                port:
+                  number: 5003
