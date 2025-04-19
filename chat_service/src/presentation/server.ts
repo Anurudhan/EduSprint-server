@@ -57,7 +57,7 @@ app.get("/chat/test", (req: Request, res: Response) => {
 });
 
 // API routes
-app.use("/", routers(dependencies));
+app.use("/chat", routers(dependencies));
 
 // Not found handler
 app.all("*", (req: Request, res: Response) => {

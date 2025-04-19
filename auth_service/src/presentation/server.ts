@@ -34,7 +34,7 @@ app.get('/health', (req: Request, res: Response) => {
     res.status(HttpStatusCode.OK).json({ success: true, message: "Auth service is up and running!" });
 });
 
-app.use('/',routes(dependencies))
+app.use('/auth',routes(dependencies))
 
 app.all("*", (req: Request, res: Response) => {
     res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, status: HttpStatusCode.BAD_REQUEST    , message: "API Not found--->AUTH" });

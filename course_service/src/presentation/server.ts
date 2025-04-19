@@ -33,7 +33,7 @@ app.get("/test", (req: Request, res: Response) => {
     });
   });
 
-app.use("/", routes(dependencie));
+app.use("/course", routes(dependencie));
 app.use("*", (req: Request, res: Response) => {
     res
       .status(httpStatusCode.NOT_FOUND)
