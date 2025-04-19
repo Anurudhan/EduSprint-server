@@ -46,7 +46,7 @@ app.get("/user/test", (req: Request, res: Response) => {
 });
 
 // app.use("/user", userRoutes(dependencies));
-app.use("/user", userRoutes(dependencies));
+app.use("/", userRoutes(dependencies));
 
 app.use("*", (req: Request, res: Response) => {
   res

@@ -29,7 +29,7 @@ export const socket = (server: HTTPServer) => {
     pingTimeout: 60000,
     pingInterval: 25000,
     // Transport options
-    transports: ['websocket'],
+    transports:  ['websocket', 'polling'],
     // Allow upgrades to websocket
     allowUpgrades: true,
   });

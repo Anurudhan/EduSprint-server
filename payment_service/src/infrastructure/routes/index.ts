@@ -9,9 +9,9 @@ export const routes = (dependencie:IDependencies)=>{
 		controllers(dependencie);
     const router=Router();
 
-    router.route("/session").post(protectRouter(),createSession);
-    router.route("/").post(protectRouter(),createPayment).get(protectRouter(),getAllPayments);
-    router.route("/userPayments/:userId").get(protectRouter(),getPaymentsById)
+    router.route("/payment/session").post(protectRouter(),createSession);
+    router.route("/payment").post(protectRouter(),createPayment).get(protectRouter(),getAllPayments);
+    router.route("/payment/userPayments/:userId").get(protectRouter(),getPaymentsById)
 
     return router
 }
