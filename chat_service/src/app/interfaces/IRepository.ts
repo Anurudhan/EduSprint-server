@@ -1,4 +1,4 @@
-import { ObjectId, Types } from "mongoose";
+import {  Types } from "mongoose";
 import { IChat,IMessage, UserEntity } from "../../domain/entities";
 
 export interface IRepository{
@@ -9,5 +9,5 @@ export interface IRepository{
     existingChat:(data:IChat) => Promise<IChat|null>;
     getChatById:(Id:string) => Promise<IChat|null>;
     createUser:(data:UserEntity) =>Promise<UserEntity|null>;
-    getChatUsersByIds:(Ids:ObjectId[]) =>Promise<UserEntity[]|null>;
+    getChatUsersByIds:(Ids:Types.ObjectId[]) =>Promise<UserEntity[]|null>;
 }

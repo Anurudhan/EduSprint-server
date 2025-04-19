@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
 import { IDependencies } from "../../app/interfaces/IDependencies";
 import { httpStatusCode } from "../../_lib/common";
+import { Types } from "mongoose";
 
 export const getChatUsersByIdsController = (dependencies: IDependencies) => {
     const { usecases: { getChatUsersByIdsUseCase } } = dependencies;
@@ -9,7 +9,7 @@ export const getChatUsersByIdsController = (dependencies: IDependencies) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             const ids = req.query.ids && typeof req.query.ids === "string" 
-                ? req.query.ids.split(',').map(id => new mongoose.Schema.Types.ObjectId(id)) // Convert to ObjectId[]
+                ? req.query.ids.split(',').map(id => new Types.ObjectId(id)) // Convert to ObjectId[]
                 : [];
             if(!ids) res.json({success:false,data:null,message:"The Ids not provides"}).status(httpStatusCode.UNAUTHORIZED)
             const result = await getChatUsersByIdsUseCase(dependencies).execute(ids);

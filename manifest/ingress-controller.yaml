@@ -1,67 +1,80 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-controller
+  name: edusprint-ingress
   annotations:
     kubernetes.io/ingress.class: addon-http-application-routing
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/use-regex: "true"
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "https://edu-sprint.vercel.app"
-    nginx.ingress.kubernetes.io/enable-access-log: "true" 
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, PATCH, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization"
+    nginx.ingress.kubernetes.io/enable-access-log: "true"
     nginx.ingress.kubernetes.io/websocket-services: "edusprint-chat-service"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+
 spec:
-  # ingressClassName: addon-http-application-routing
-  # ingressClassName: webapprouting.kubernetes.azure.com
-  # ingressClassName: nginx
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - edusprint.shop
+      secretName: edusprint-tls
   rules:
-    - host: 3ac5108c8bfb4a1ea850.southindia.aksapp.io
+    - host: edusprint.shop
       http:
         paths:
-          - path: /auth
-            pathType: Prefix
+          - path: /auth(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: edusprint-auth-service
                 port:
                   number: 5001
-          - path: /user
-            pathType: Prefix
+          - path: /user(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: edusprint-user-service
                 port:
                   number: 5002
-          - path: /notification
-            pathType: Prefix
+          - path: /notification(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: edusprint-notification-service
                 port:
                   number: 5004
-          - path: /socket.io
+          - path: /socket.io/
             pathType: Prefix
             backend:
               service:
                 name: edusprint-chat-service
                 port:
-                  number: 5006
-          - path: /course
-            pathType: Prefix
+                  number: 5003
+          - path: /course(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: edusprint-course-service
                 port:
                   number: 5005
-          - path: /payment
-            pathType: Prefix
+          - path: /payment(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: edusprint-payment-service
                 port:
                   number: 5006
-          - path: /chat
-            pathType: Prefix
+          - path: /chat(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: edusprint-chat-service

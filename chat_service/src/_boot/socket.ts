@@ -16,10 +16,9 @@ export const socket = (server: HTTPServer) => {
   // Get frontend URL from environment with fallback
   const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
   console.log(FRONTEND_URL, "frontend url for socket.io ------------>");
-  
   const io = new SocketIOServer(server, {
     cors: {
-      origin: [FRONTEND_URL, "http://localhost:5173"], // Add common development URLs
+      origin: [FRONTEND_URL], // Add common development URLs
       methods: ["GET", "POST"],
       credentials: true,
       allowedHeaders: ["Content-Type", "Authorization"]
@@ -96,6 +95,14 @@ export const socket = (server: HTTPServer) => {
 
     socket.on("delete-message", ({ messageId, roomId }: any) => {
       io.to(roomId).emit("get-delete-message", messageId);
+    });
+    socket.on('block-user', ({ userId }) => {
+      console.log(`Blocking user: ${userId}`);
+      // Find the socket ID from the onlineUsers array instead
+      const userToBlock = onlineUsers.find(user => user.userId === userId);
+      if (userToBlock && userToBlock.socketId) {
+        io.to(userToBlock.socketId).emit('user-blocked');
+      }
     });
 
     socket.on("message-seen", async ({ roomId, chatId, userId }) => {

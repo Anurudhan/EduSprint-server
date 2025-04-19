@@ -1,6 +1,6 @@
-import { ObjectId } from "mongoose";
 import { UserEntity } from "../entities";
+import { Types } from "mongoose";
 
 export interface IGetChatUsersByIdsUseCase{
-    execute(Ids: ObjectId[]): Promise<UserEntity[] | null>;
+    execute(Ids: Types.ObjectId[]): Promise<UserEntity[] | null>;
 }
