@@ -11,7 +11,7 @@ export const routes = (dependencie:IDependencies)=>{
         ,getCourseById,updateCourse,getAllCourse,
         createEnrollment,getEnrollmentByUserId,getEnrollmentById,
     createAssessment,getAssessment,updateEnrollment,
-updateAssessment,getAssessmentResult,createAssessmentResult,streamVideo} = controller(dependencie)
+updateAssessment,getAssessmentResult,createAssessmentResult,streamVideo,deleteCloudinary} = controller(dependencie)
 
     router.route("/create-category").post(protectRouter(Role.admin),createCategory);
     router.route("/update-category").post(protectRouter(Role.admin),editCategory);
@@ -23,6 +23,7 @@ updateAssessment,getAssessmentResult,createAssessmentResult,streamVideo} = contr
     router.route("/updatecourse").post(protectRouter(Role.teacher),updateCourse);
     router.route("/allcourse").get(getAllCourse);
     router.route("/video/stream/:courseId/:lessonId").get(streamVideo)
+    router.post('/cloudinary/delete',deleteCloudinary)
 
     router.route("/enrollment").post(protectRouter(),createEnrollment).put(protectRouter(),updateEnrollment)
     router.route("/enrollment/:enrollmentId").get(protectRouter(),getEnrollmentById);

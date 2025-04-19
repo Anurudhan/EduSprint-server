@@ -1,3 +1,4 @@
+import { CustomError } from "../../../_lib/http/CustomError";
 import { CourseEntity } from "../../../domain/entities";
 import { IDependencies } from "../../interfaces/IDepndencies";
 
@@ -16,6 +17,9 @@ export const updateCourseUseCase = (dependencie:IDependencies) =>{
             catch(error:unknown){
                 if (error instanceof Error) {
                     throw error; 
+                }
+                else if (error instanceof CustomError) {
+                    throw error;
                 }
                 throw new Error("An unexpected error occurred in updateCourse.");
             }
