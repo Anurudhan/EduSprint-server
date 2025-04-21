@@ -12,8 +12,8 @@ export const routes = (app: Application,server:Server) => {
   // Proxy for Auth Service
   app.use(
     "/auth",
-    proxy(Service.AUTH_SERVICE_URL, {
-      proxyReqPathResolver: (req) => req.url,
+    proxy(`${Service.AUTH_SERVICE_URL}`, {
+      proxyReqPathResolver: (req) => `/auth${req.url}`,
 
       // Decorate the response to forward original status and body
       userResDecorator: async (proxyRes, proxyResData, req, res) => {
@@ -32,8 +32,8 @@ export const routes = (app: Application,server:Server) => {
   // Proxy for User Service
   app.use(
     "/user",
-    proxy(Service.USER_SERVICE_URL, {
-      proxyReqPathResolver: (req) => req.url,
+    proxy(`${Service.USER_SERVICE_URL}`, {
+      proxyReqPathResolver: (req) => `/user${req.url}`,
       userResDecorator: async (proxyRes, proxyResData, req, res) => {
         res.status(proxyRes.statusCode??500);
         return proxyResData;
@@ -50,8 +50,8 @@ export const routes = (app: Application,server:Server) => {
 
   app.use(
     "/course",
-    proxy(Service.COURSE_SERVICE_URL, {
-      proxyReqPathResolver: (req) => req.url,
+    proxy(`${Service.COURSE_SERVICE_URL}`, {
+      proxyReqPathResolver: (req) => `/course${req.url}`,
       userResDecorator: async (proxyRes, proxyResData, req, res) => {
         res.status(proxyRes.statusCode??500);
         return proxyResData;
@@ -64,8 +64,8 @@ export const routes = (app: Application,server:Server) => {
   );
   app.use(
     "/payment",
-    proxy(Service.PAYMENT_SERVICE_URL, {
-      proxyReqPathResolver: (req) => req.url,
+    proxy(`${Service.PAYMENT_SERVICE_URL}/payment`, {
+      proxyReqPathResolver: (req) => `/payment${req.url}`,
       userResDecorator: async (proxyRes, proxyResData, req, res) => {
         res.status(proxyRes.statusCode??500);
         return proxyResData;

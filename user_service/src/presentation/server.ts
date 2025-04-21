@@ -8,6 +8,7 @@ import cors from 'cors'
 import { logger } from "../_lib/utilities/middleware/logger";
 import { userRoutes } from "../infrastructure/routers";
 import { dependencies } from "../_boot/dependencies";
+import { errorHandler } from "../_lib/utilities/middleware/errorHandler";
 
 // Load environment-specific variables
 // if (process.env.NODE_ENV === "production") {
@@ -53,7 +54,7 @@ app.use("*", (req: Request, res: Response) => {
     .status(404)
     .json({ success: false, status: 404, message: "Api Not found---->user" });
 });
-
+app.use(errorHandler);
 const start = () => {
   app.listen(PORT, () => {
     console.log(`The user-service is listening on port ${PORT}`);

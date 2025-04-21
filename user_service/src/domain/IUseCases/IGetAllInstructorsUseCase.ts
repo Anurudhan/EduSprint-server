@@ -1,6 +1,6 @@
-import { UserEntity } from "../entities/UserEntity";
+import { StudentQueryResult } from "../../infrastructure/database/repositories";
 
 
 export interface IGetAllInstructorsUseCase {
-    execute(page?: number, limit?: number): Promise <UserEntity[] | null>
+    execute(page?: number, limit?: number,search?:string): Promise <StudentQueryResult>
 }

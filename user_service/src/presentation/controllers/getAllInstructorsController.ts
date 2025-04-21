@@ -1,6 +1,7 @@
 
 import { Request, Response, NextFunction } from "express";
 import { IDependencies } from "../../application/Interfaces/IDependencies";
+import { CustomError } from "../../_lib/utilities/common/CustomError";
 
 export const getAllInstructorsController = (dependencies: IDependencies) => {
     const {
@@ -10,24 +11,35 @@ export const getAllInstructorsController = (dependencies: IDependencies) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
 
-            let page = parseInt(req.query.page as string, 10);
-            let limit = parseInt(req.query.limit as string, 10) ;
+            const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+			const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 10;
+			const search = req.query.search ? (req.query.search as string) : "";
 
-            if (!req.query.page) {
-                page = 1;
-            }
-            if(!req.query.limit){
-                limit = 100;
-            }
 
-            const result = await getAllInstructorsUseCase(dependencies).execute(page, limit);
-            res.status(200).json({
+            const result = await getAllInstructorsUseCase(dependencies).execute(page, limit,search);
+            if (result.data.length === 0) {
+                res.status(200).json({
+                  success: true,
+                  message: "No students found",
+                  data: [],
+                  totalCount: 0,
+                  totalPages: 1,
+                });
+              }
+              
+              res.status(200).json({
                 success: true,
-                data: result,
-                message: "All instructors fetched"
-            });
-        } catch (error) {
-            next(error);
+                message: "Students fetched successfully",
+                data:result.data,
+                totalCount:result.totalCount,
+                totalPages:result.totalPages,
+              });
+        } catch (error:any) {
+           if (error instanceof CustomError) {
+                return next(error);
+            } else {
+                return next(new CustomError(error.message || "Something went wrong", 500));
+            }
         }
     }
 }
