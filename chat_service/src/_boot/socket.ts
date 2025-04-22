@@ -216,7 +216,7 @@ export const socket = (server: HTTPServer) => {
     path: process.env.SOCKET_PATH || "/socket.io",
     pingTimeout: 60000,
     pingInterval: 25000,
-    transports: ['websocket', 'polling'],
+    transports: ['websocket'],
     allowUpgrades: true,
   });
 
