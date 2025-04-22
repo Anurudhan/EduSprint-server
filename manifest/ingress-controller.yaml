@@ -3,30 +3,34 @@ kind: Ingress
 metadata:
   name: edusprint-ingress
   annotations:
-    kubernetes.io/ingress.class: nginx  # ✅ Fixed: match with ingressClassName
+    kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "https://edu-sprint.vercel.app" 
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://edu-sprint.vercel.app"
     nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, PATCH, OPTIONS"
     nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization"
     nginx.ingress.kubernetes.io/enable-access-log: "true"
-    nginx.ingress.kubernetes.io/websocket-services: "edusprint-chat-service"
     nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.ingress.kubernetes.io/enable-websocket: "true"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    # WebSocket specific configurations
+    nginx.ingress.kubernetes.io/websocket-services: "edusprint-chat-service"
+    # Updated configuration snippet for better WebSocket handling
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "upgrade";
+      proxy_set_header Connection "Upgrade";
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header Host $host;
+      proxy_http_version 1.1;
       proxy_cache_bypass $http_upgrade;
-
+      # Disable buffering for WebSockets
+      proxy_buffering off;
 spec:
-  ingressClassName: nginx  # ✅ Must match the annotation above
+  ingressClassName: nginx
   tls:
     - hosts:
         - edusprint.shop
@@ -56,13 +60,14 @@ spec:
                 name: edusprint-notification-service
                 port:
                   number: 5004
-          - path: /socket.io(/|$)(.*)
-            pathType: ImplementationSpecific
+          # More specific Socket.io configuration - higher priority
+          - path: /socket.io
+            pathType: Prefix
             backend:
               service:
                 name: edusprint-chat-service
                 port:
-                  number: 5003
+                  number: 5003  
           - path: /chat(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
