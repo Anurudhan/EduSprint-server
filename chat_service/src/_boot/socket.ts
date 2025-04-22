@@ -201,6 +201,10 @@ let onlineUsers: OnlineUser[] = [];
 export const socket = (server: HTTPServer) => {
   const FRONTEND_URL = process.env.FRONTEND_URL as string;
   console.log(FRONTEND_URL, "frontend url for socket.io ------------>");
+  console.log({
+    FRONTEND_URL: process.env.FRONTEND_URL,
+    SOCKET_PATH: process.env.SOCKET_PATH || "/socket.io/"
+  });
 
   const io = new SocketIOServer(server, {
     cors: {
@@ -244,6 +248,14 @@ export const socket = (server: HTTPServer) => {
 
       addOrUpdateUser(userId, socket.id);
       io.emit("online-users", onlineUsers);
+    });
+
+    io.engine.on("connection_error", (err) => {
+      console.log("Connection error:");
+      console.log(err.req);      
+      console.log(err.code);    
+      console.log(err.message);  
+      console.log(err.context); 
     });
 
     socket.on("join-room", (roomId: string) => {
