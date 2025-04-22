@@ -14,7 +14,7 @@ export const getAllStudents = async (
 	search?: string
 ): Promise<StudentQueryResult> => {
 	try {
-		const query: any = { role: Role.student };
+		const query: any = { role: Role.student,isVerified:true };
 
 		if (search && search.trim() !== "") {
 			const searchRegex = new RegExp(search.trim(), "i");
