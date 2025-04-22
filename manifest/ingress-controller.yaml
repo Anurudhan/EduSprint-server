@@ -54,7 +54,7 @@ spec:
                 name: edusprint-notification-service
                 port:
                   number: 5004
-          - path: /socket.io
+          - path: /socket.io/
             pathType: Prefix
             backend:
               service:

@@ -213,7 +213,7 @@ export const socket = (server: HTTPServer) => {
       credentials: true,
       allowedHeaders: ["Content-Type", "Authorization"]
     },
-    path: process.env.SOCKET_PATH || "/socket.io",
+    path: process.env.SOCKET_PATH || "/socket.io/",
     pingTimeout: 60000,
     pingInterval: 25000,
     transports: ['websocket'],
