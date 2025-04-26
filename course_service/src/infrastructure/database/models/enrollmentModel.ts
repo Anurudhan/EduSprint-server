@@ -71,31 +71,24 @@ const enrollmentSchema = new Schema({
     certificate: {
         _id: {
             type: String,
-            required: true
         },
         enrollmentId: {
             type: String,
-            required: true
         },
         userId: {
             type: String,
-            required: true
         },
         courseId: {
             type: String,
-            required: true
         },
         issuedAt: {
             type: Date,
-            required: true
         },
         certificateNumber: {
             type: String,
-            required: true
         },
         score: {
             type: Number,
-            required: true
         },
         downloadUrl: {
             type: String

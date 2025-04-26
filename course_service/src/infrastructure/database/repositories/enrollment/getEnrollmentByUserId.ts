@@ -1,14 +1,20 @@
 import { Types } from "mongoose";
-import { EnrollmentEntity } from "../../../../domain/entities";
+import { CompletionStatus, EnrollmentEntity } from "../../../../domain/entities";
 import { Enrollment } from "../../models/enrollmentModel";
 import { profile } from "console";
 
 export const getEnrollmentByUserId = async (
-  userId: string
-): Promise<EnrollmentEntity[] | null> => {
+  userId: string,
+  page: number = 1,
+  limit: number = 6,
+  search: string = ""
+): Promise<{ enrollment: EnrollmentEntity[], totalEnrollments: number ,completedCount:number,progressCount:number} | null> => {
   try {
     const objectId = new Types.ObjectId(userId);
     console.log(objectId, "this is user Id in repo");
+
+    // Build the search regex for course title and description
+    const searchRegex = new RegExp(search, "i"); // Case-insensitive search
 
     const enrollment = await Enrollment.aggregate([
       { $match: { userId: objectId } },
@@ -21,6 +27,14 @@ export const getEnrollmentByUserId = async (
         },
       },
       { $unwind: "$course" },
+      {
+        $match: {
+          $or: [
+            { "course.title": { $regex: searchRegex } },
+            { "course.description": { $regex: searchRegex } },
+          ],
+        },
+      },
       {
         $lookup: {
           from: "users",
@@ -65,17 +79,28 @@ export const getEnrollmentByUserId = async (
             userName: 1,
             email: 1,
             role: 1,
-            profile:1
+            profile: 1
           },
         },
       },
+      { $skip: (page - 1) * limit },
+      { $limit: limit },
     ]);
+    const totalEnrollments = await Enrollment.find().countDocuments()
+    const completedCount = await Enrollment.countDocuments({
+      userId: objectId,
+      completionStatus: CompletionStatus.Completed,
+    });
+    const progressCount = await Enrollment.countDocuments({
+      userId:objectId,
+      completionStatus:CompletionStatus.inProgress
+    })
 
     if (!enrollment || enrollment.length === 0) {
       return null;
     }
 
-    return enrollment as EnrollmentEntity[];
+    return { enrollment: enrollment as EnrollmentEntity[], totalEnrollments ,completedCount,progressCount};
   } catch (error: any) {
     throw new Error(
       error?.message || "An error occurred while fetching enrollments."

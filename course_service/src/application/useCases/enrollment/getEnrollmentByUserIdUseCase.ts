@@ -7,8 +7,8 @@ export const getEnrollmentByUserIdUseCase = (dependencies: IDependencies) => {
     } = dependencies;
 
     return {
-        execute: async (userId: string) => {
-            return await getEnrollmentByUserId(userId);
+        execute: async (userId: string,page: number = 1,limit: number = 6,search: string = "") => {
+            return await getEnrollmentByUserId(userId,page,limit,search);
         }
     }
     

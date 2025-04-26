@@ -8,10 +8,11 @@ export const    getEnrollmentByUserIdController = (dependancies: IDependencies) 
         try {
 
             const {userId} = req.params;
-            console.log(userId,"this is user Id")
+            const { page = 1, limit = 6, search = '' } = req.query;
+            console.log(search,"this is user Id")
 
             const result = await getEnrollmentByUserIdUseCase(dependancies)
-                .execute(userId);
+                .execute(userId,Number(page), Number(limit), search as string);
                 console.log(result, " this  is the result of the enrollment")
                 if(result  === null){
                     res.status(404).json({
@@ -23,7 +24,10 @@ export const    getEnrollmentByUserIdController = (dependancies: IDependencies) 
                 }
             res.status(200).json({
                 success: true,
-                data: result,
+                data: result?.enrollment,
+                totalEnrollments:result?.totalEnrollments,
+                progressCount:result?.progressCount,
+                completedCount:result?.completedCount,
                 message: "Enrollment retrieved!"
             });
 

@@ -9,7 +9,7 @@ export const createEnrollment = async (data: EnrollmentEntity): Promise <Enrollm
         if (!enrolled) {
             throw new Error("Course enrollment failed!");
         }
-
+        console.log("I am enrolled =========================> " ,enrolled.userId)
         return enrolled;
 
     } catch (error: any) {

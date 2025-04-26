@@ -14,7 +14,7 @@ export const createPaymentController = (dependencies: IDependencies) => {
             
 
             const result = await createPaymentUseCase(dependencies).execute(req.body)
-
+            console.log(result,"\n this is saving data of the payment ======================>");
             if (!result) {
                 throw new Error("payment failed!");
             }

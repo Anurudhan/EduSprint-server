@@ -11,8 +11,8 @@ export const createEnrollmentController = (dependencies: IDependencies) => {
 		try {
 			const enrollments = await getEnrollmentByUserIdUseCase(
 				dependencies
-			).execute(req.body?.userId);
-			const existingEnrollment = enrollments?.find(
+			).execute(req.body?.userId,1,1000,"");
+			const existingEnrollment = enrollments?.enrollment.find(
 				(item) =>
 					item.courseId._id.toString() === req.body?.courseId?.toString()
 			);

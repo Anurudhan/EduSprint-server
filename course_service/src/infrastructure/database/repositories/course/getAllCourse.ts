@@ -10,8 +10,11 @@ export const getAllCourse = async (data: {
 }) => {
   try {
     const query: any = {};
-    const { page = 1, limit = 0, filters } = data;
+    const {filters } = data;
+    const page = data.page?data.page:1;
+    const limit = data.limit?data.limit:0;
     console.log(filters?.priceType,"this is type")
+    console.log(page,limit,"this is the page and the limit")
 
     if (filters?.search) {
       query.$or = [
@@ -65,7 +68,6 @@ export const getAllCourse = async (data: {
       .sort({ updatedAt: "descending" })
       .skip((page - 1) * limit)
       .limit(limit);
-
     return { courses, totalCourses };
   } catch (error: unknown) {
     if (error instanceof Error) throw new Error(error.message);

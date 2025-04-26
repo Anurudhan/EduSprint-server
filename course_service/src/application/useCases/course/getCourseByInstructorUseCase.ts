@@ -3,7 +3,7 @@ import { IDependencies } from "../../interfaces/IDepndencies";
 export const getCourseByInstructorUseCase = (dependencie:IDependencies) =>{
     const {repositories:{getCourseByInstructor}}=dependencie;
     return {
-        execute:async(data:{id:string,page:string,limit:string})=>{
+        execute:async(data:{id:string,page:string,limit:string,search:string})=>{
             try{
                 return await getCourseByInstructor(data)
             }
